@@ -1,4 +1,4 @@
 # movie-service
 
 
-A collecition of all movies
+A collection of all movies
