@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0E488274
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "movie-store", "src\movie-store.csproj", "{5D609A60-8E6F-4F24-9B46-AF804CB69BB9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "movie.store.workflow", "movie.store.workflow\movie.store.workflow.csproj", "{E9442DEE-8C66-4AEA-BF73-55C2B7B9992B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,12 +21,17 @@ Global
 		{5D609A60-8E6F-4F24-9B46-AF804CB69BB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D609A60-8E6F-4F24-9B46-AF804CB69BB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D609A60-8E6F-4F24-9B46-AF804CB69BB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9442DEE-8C66-4AEA-BF73-55C2B7B9992B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9442DEE-8C66-4AEA-BF73-55C2B7B9992B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9442DEE-8C66-4AEA-BF73-55C2B7B9992B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9442DEE-8C66-4AEA-BF73-55C2B7B9992B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{5D609A60-8E6F-4F24-9B46-AF804CB69BB9} = {F5AD1518-194D-44C0-B8A0-5DA923D54A47}
+		{E9442DEE-8C66-4AEA-BF73-55C2B7B9992B} = {F5AD1518-194D-44C0-B8A0-5DA923D54A47}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {91221504-795E-4CBB-B429-426D4169E4F7}
