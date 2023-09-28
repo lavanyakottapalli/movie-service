@@ -1,5 +1,4 @@
-// <copyright file="Program.cs" company="Microsoft Corp.">
-// Copyright (c) Microsoft Corp.. All rights reserved.
+// <copyright file="Program.cs" company="Lavanya.">
 // </copyright>
 
 namespace Microsoft.Movie.Store

@@ -1,5 +1,4 @@
-﻿// <copyright file="Startup.cs" company="Microsoft Corp.">
-// Copyright (c) Microsoft Corp.. All rights reserved.
+﻿// <copyright file="Startup.cs" company="Lavanya.">
 // </copyright>
 
 namespace Microsoft.Movie.Store
@@ -52,20 +51,20 @@ namespace Microsoft.Movie.Store
 
             // Create a client
             AzureKeyCredential credential = new AzureKeyCredential(key);
-            SearchClient client = new SearchClient(endpoint, indexName, credential);
+            SearchClient searchClient = new SearchClient(endpoint, indexName, credential);
 
-            services.AddSingleton(client);
+            services.AddSingleton(searchClient);
 
             RestClientOptions options = new RestClientOptions("https://api.themoviedb.org/3/authentication");
 
 #pragma warning disable CA2000 // Dispose objects before losing scope
-            RestClient client = new RestClient(options);
+            RestClient restClient = new RestClient(options);
 #pragma warning restore CA2000 // Dispose objects before losing scope
             RestRequest request = new RestRequest("");
             request.AddHeader("accept", "application/json");
             request.AddHeader("Authorization", "Bearer ");
 
-            services.AddSingleton(client);
+            services.AddSingleton(restClient);
         }
 
         /// <summary>
