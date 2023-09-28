@@ -1,4 +1,4 @@
-﻿// <copyright file="Genre.cs" company="Lavanya.">
+﻿// <copyright file="MovieIndexRecord.cs" company="Lavanya.">
 // </copyright>
 
 namespace Microsoft.Movie.Store.Models
@@ -9,13 +9,13 @@ namespace Microsoft.Movie.Store.Models
     /// <summary>
     /// Movie details.
     /// </summary>
-    public class Movie
+    public class MovieIndexRecord
     {
         /// <summary>
         /// Gets or sets the Movie identifier.
         /// </summary>
         [JsonPropertyName("id")]
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
         /// Gets or sets the movie title.
@@ -26,13 +26,13 @@ namespace Microsoft.Movie.Store.Models
         /// <summary>
         /// Gets or sets the Genres.
         /// </summary>
-        [JsonPropertyName("genres")]
-        public Collection<Genre> Genres { get; set; }
+        [JsonPropertyName("genre")]
+        public string Genre { get; set; }
 
         /// <summary>
         /// Gets or sets the Languages.
         /// </summary>
-        [JsonPropertyName("spoken_languages")]
-        public Collection<Language> Languages { get; set; } 
+        [JsonPropertyName("language")]
+        public string Language { get; set; } 
     }
 }

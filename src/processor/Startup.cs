@@ -9,6 +9,7 @@ namespace Microsoft.Movie.Store
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using RestSharp;
+    using Microsoft.Movie.Store.Workflow;
 
     /// <summary>
     /// StartUp.
@@ -60,11 +61,10 @@ namespace Microsoft.Movie.Store
 #pragma warning disable CA2000 // Dispose objects before losing scope
             RestClient restClient = new RestClient(options);
 #pragma warning restore CA2000 // Dispose objects before losing scope
-            RestRequest request = new RestRequest("");
-            request.AddHeader("accept", "application/json");
-            request.AddHeader("Authorization", "Bearer ");
 
             services.AddSingleton(restClient);
+            services.AddHostedService<LongRunning>();
+            services.AddSingleton<IProcessorWorkflow, PopulateMovieStoreWorkflow>();
         }
 
         /// <summary>

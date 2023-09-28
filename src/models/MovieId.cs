@@ -14,6 +14,6 @@ namespace Microsoft.Movie.Store.Models
         /// Gets or sets the movide id.
         /// </summary>
         [JsonPropertyName("id")]
-        public string Id { get; set; }
+        public int Id { get; set; }
     }
 }

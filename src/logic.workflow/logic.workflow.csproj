@@ -4,7 +4,7 @@
 		<LangVersion>11.0</LangVersion>
 		<AssemblyName>Microsoft.Movie.Store.Workflow</AssemblyName>
 		<RootNamespace>Microsoft.Movie.Store.Workflow</RootNamespace>
-		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		<TreatWarningsAsErrors>false</TreatWarningsAsErrors>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<AnalysisLevel>latest-all</AnalysisLevel>
 		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>

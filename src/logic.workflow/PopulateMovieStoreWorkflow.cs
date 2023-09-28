@@ -10,6 +10,7 @@ namespace Microsoft.Movie.Store.Workflow
     using RestSharp;
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Text.Json;
     using System.Threading.Tasks;
 
@@ -40,40 +41,62 @@ namespace Microsoft.Movie.Store.Workflow
             int page = 1, totalPages = 1;
             bool isFirstTime = true;
 
+
             do
             {
-                var requestMovieChanges = new RestRequest($"https://api.themoviedb.org/3/movie/changes?page={page}");
-                requestMovieChanges.AddHeader("accept", "application/json");
-                requestMovieChanges.AddHeader("Authorization", "Bearer ");
-                RestResponse response = await this.restClient.GetAsync(requestMovieChanges).ConfigureAwait(false);
-
-                if (response.IsSuccessStatusCode)
+                try
                 {
-                    MovieIdsResponse movieIdsResponse = JsonSerializer.Deserialize<MovieIdsResponse>(response.Content);
+                    var requestMovieChanges = new RestRequest($"https://api.themoviedb.org/3/movie/changes?page={page}&api_key=38f5b378e4d94e47e73889b59ff524b0");
+                    requestMovieChanges.AddHeader("accept", "application/json");
+                    requestMovieChanges.AddHeader("Authorization", "Bearer 38f5b378e4d94e47e73889b59ff524b0");
+                    RestResponse response = await this.restClient.GetAsync(requestMovieChanges).ConfigureAwait(false);
 
-                    if (isFirstTime)
+                    if (response.IsSuccessStatusCode)
                     {
-                        totalPages = movieIdsResponse.TotalPages;
-                        isFirstTime = false;
+                        MovieIdsResponse movieIdsResponse = JsonSerializer.Deserialize<MovieIdsResponse>(response.Content);
+
+                        if (isFirstTime)
+                        {
+                            totalPages = movieIdsResponse.TotalPages;
+                            isFirstTime = false;
+                        }
+
+                        foreach (var movieId in movieIdsResponse.MovieIds)
+                        {
+                            List<MovieIndexRecord> movies = new List<MovieIndexRecord>();
+
+                            var movieRequest = new RestRequest($"https://api.themoviedb.org/3/movie/{movieId.Id}?api_key=");
+                            movieRequest.AddHeader("accept", "application/json");
+
+                            RestResponse movieDetails = await this.restClient.GetAsync(movieRequest).ConfigureAwait(false);
+                            Movie movie = JsonSerializer.Deserialize<Movie>(movieDetails.Content);
+
+                            MovieIndexRecord indexRecord = new MovieIndexRecord();
+                            indexRecord.Title = movie.Title;
+                            indexRecord.Id = $"{movie.Id}";
+                            indexRecord.Genre = movie.Genres.Count > 0 ? movie.Genres.First().Name : string.Empty;
+                            indexRecord.Language = movie.Languages.Count > 0 ? movie.Languages.First().Name : string.Empty;
+
+                            movies.Add(indexRecord);
+
+                            try
+                            {
+                                await this.searchClient.MergeOrUploadDocumentsAsync(movies).ConfigureAwait(false);
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine(ex.ToString());
+                            }
+                        }
                     }
-
-                    List<Movie> movies = new List<Movie>();
-                    foreach (var movieId in movieIdsResponse.MovieIds)
-                    {
-                        var movieRequest = new RestRequest($"https://api.themoviedb.org/3/movie/{movieId}");
-                        movieRequest.AddHeader("accept", "application/json");
-                        movieRequest.AddHeader("Authorization", "Bearer ");
-
-                        RestResponse movieDetails = await this.restClient.GetAsync(movieRequest).ConfigureAwait(false);
-                        Movie movie = JsonSerializer.Deserialize<Movie>(movieDetails.Content);
-
-                        movies.Add(movie);
-                    }
-
-                    await this.searchClient.MergeOrUploadDocumentsAsync(movies).ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
                 }
 
                 page++;
+
             } while (page < totalPages);
         }
     }
