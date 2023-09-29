@@ -4,8 +4,6 @@
 namespace Microsoft.Movie.Store.Workflow
 {
     using Azure.Search.Documents;
-    using Azure.Search.Documents.Models;
-    using Microsoft.Extensions.Azure;
     using Microsoft.Movie.Store.Models;
     using RestSharp;
     using System;
@@ -41,12 +39,11 @@ namespace Microsoft.Movie.Store.Workflow
             int page = 1, totalPages = 1;
             bool isFirstTime = true;
 
-
             do
             {
                 try
                 {
-                    var requestMovieChanges = new RestRequest($"https://api.themoviedb.org/3/movie/changes?page={page}&api_key=38f5b378e4d94e47e73889b59ff524b0");
+                    var requestMovieChanges = new RestRequest($"https://api.themoviedb.org/3/movie/changes?page={page}&api_key=");
                     requestMovieChanges.AddHeader("accept", "application/json");
                     requestMovieChanges.AddHeader("Authorization", "Bearer 38f5b378e4d94e47e73889b59ff524b0");
                     RestResponse response = await this.restClient.GetAsync(requestMovieChanges).ConfigureAwait(false);

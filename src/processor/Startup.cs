@@ -10,6 +10,12 @@ namespace Microsoft.Movie.Store
     using Microsoft.Extensions.DependencyInjection;
     using RestSharp;
     using Microsoft.Movie.Store.Workflow;
+    using System.Text.Json.Serialization;
+    using Microsoft.AspNetCore.Diagnostics;
+    using Microsoft.DotNet.Scaffolding.Shared;
+    using System.Reflection;
+    using Microsoft.AspNetCore.Mvc.ApiExplorer;
+    using Microsoft.Movie.Store.Models;
 
     /// <summary>
     /// StartUp.
@@ -63,16 +69,36 @@ namespace Microsoft.Movie.Store
 #pragma warning restore CA2000 // Dispose objects before losing scope
 
             services.AddSingleton(restClient);
-            services.AddHostedService<LongRunning>();
+            // services.AddHostedService<LongRunning>();
             services.AddSingleton<IProcessorWorkflow, PopulateMovieStoreWorkflow>();
+            services.AddSingleton<ISearchWorkflow<MovieIndexRecord>, SearchWorkflow<MovieIndexRecord>>();
+            _ = services.AddSwaggerGen();
+            _ = services.AddControllers()
+            .AddJsonOptions(opt =>
+            {
+                opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });
+            _ = services.AddMvc().ConfigureApiBehaviorOptions(options =>
+            {
+                options.SuppressInferBindingSourcesForParameters = true;
+            });
         }
 
         /// <summary>
         /// Configures the specified application. This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         /// </summary>
-        public void Configure(IHostApplicationLifetime lifetime, RestClient restClient)
+        public void Configure(IApplicationBuilder app, IHostApplicationLifetime lifetime, RestClient restClient)
         {
             ArgumentNullException.ThrowIfNull(lifetime);
+
+            _ = app.UseRouting();
+            _ = app.UseSwagger();
+            _ = app.UseSwaggerUI();
+            _ = app.UseHttpsRedirection();
+            _ = app.UseEndpoints(endpoints =>
+            {
+                _ = endpoints.MapControllers();
+            });
 
             _ = lifetime.ApplicationStopping.Register(() =>
             {
