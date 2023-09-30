@@ -36,14 +36,14 @@ namespace Microsoft.Movie.Store.Controllers.V1
         [HttpPost]
         [Route("search")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(List<Movie>), 200)]
+        [ProducesResponseType(typeof(List<MovieIndexRecord>), 200)]
         [SwaggerResponseHeader(new int[] { 200, 201, 500 }, "x-ms-request-tracking-id", "string", "Client request tracking Id.")]
         [SwaggerResponseHeader(new int[] { 200, 201, 500 }, "tenant-name", "string", "Tenant Name of UDR Instance.")]
-        public async Task<ActionResult<List<MovieIndexRecord>>> SearchMoviesAsync([Required][NotNull] GraphSearchRequest httpRequest, [NotNull] CancellationToken cancellationToken = default)
+        public async Task<ActionResult<List<MovieIndexRecord>>> SearchMoviesAsync([Required][NotNull][FromBody] GraphSearchRequest httpRequest, [NotNull] CancellationToken cancellationToken = default)
         {
             List<MovieIndexRecord> moviesGraphRecord = await this.searchWorkflow.SearchDocumentsAsync(httpRequest, cancellationToken).ConfigureAwait(false);
 
-            return this.Ok(moviesGraphRecord);
+            return this.Ok(moviesGraphRecord.Where((x) => x.Thumbnail != null).ToList());
         }
     }
 }

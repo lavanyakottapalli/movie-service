@@ -14,24 +14,28 @@ namespace Microsoft.Movie.Store.Models
         /// <summary>
         /// Gets the count of the search resykts.
         /// </summary>
-        [JsonPropertyName("count")]
-        public bool Count { get; init; }
+        [JsonIgnore]
+        [JsonPropertyName("top")]
+        public int Top { get; init; }
 
         /// <summary>
         /// Gets the facets.
         /// </summary>
+        [JsonIgnore]
         [JsonPropertyName("facets")]
         public IEnumerable<string> Facets { get; init; }
 
         /// <summary>
         /// Gets the filter expression.
         /// </summary>
+        [JsonIgnore]
         [JsonPropertyName("filterExpression")]
         public string FilterExpression { get; init; }
 
         /// <summary>
         /// Gets the order by.
         /// </summary>
+        [JsonIgnore]
         [JsonPropertyName("orderBy")]
         public string OrderBy { get; init; }
 
@@ -44,6 +48,7 @@ namespace Microsoft.Movie.Store.Models
         /// <summary>
         /// Gets the search fields.
         /// </summary>
+        [JsonIgnore]
         [JsonPropertyName("searchFields")]
         public IEnumerable<string> SearchFields { get; init; }
 
@@ -51,6 +56,7 @@ namespace Microsoft.Movie.Store.Models
         /// Gets the select query.
         /// </summary>
         [JsonPropertyName("select")]
+        [JsonIgnore]
         public IEnumerable<string> Select { get; init; }
     }
 }

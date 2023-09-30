@@ -49,8 +49,8 @@ namespace Microsoft.Movie.Store.Workflow
 
             SearchOptions options = new()
             {
+                Size = 30,
                 Filter = filterExpression,
-                IncludeTotalCount = graphSearchRequest.Count,
             };
             if (graphSearchRequest.Facets != null)
             {
