@@ -34,6 +34,7 @@ namespace Microsoft.Movie.Store.Controllers.V1
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>Task.</returns>
         [HttpPost]
+        [Route("search")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(List<Movie>), 200)]
         [SwaggerResponseHeader(new int[] { 200, 201, 500 }, "x-ms-request-tracking-id", "string", "Client request tracking Id.")]
