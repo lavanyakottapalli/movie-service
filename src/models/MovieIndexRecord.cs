@@ -3,7 +3,7 @@
 
 namespace Microsoft.Movie.Store.Models
 {
-    using System.Collections.ObjectModel;
+    using System.Collections.Generic;
     using System.Text.Json.Serialization;
 
     /// <summary>
@@ -14,6 +14,7 @@ namespace Microsoft.Movie.Store.Models
         /// <summary>
         /// Gets or sets the Movie identifier.
         /// </summary>
+        [JsonIgnore]
         [JsonPropertyName("id")]
         public string Id { get; set; }
 
@@ -24,15 +25,27 @@ namespace Microsoft.Movie.Store.Models
         public string Title { get; set; }
 
         /// <summary>
-        /// Gets or sets the Genres.
+        /// Gets or sets the movie year.
         /// </summary>
-        [JsonPropertyName("genre")]
-        public string Genre { get; set; }
+        [JsonPropertyName("year")]
+        public int Year { get; set; }
 
         /// <summary>
-        /// Gets or sets the Languages.
+        /// Gets or sets the Genres.
         /// </summary>
-        [JsonPropertyName("language")]
-        public string Language { get; set; } 
+        [JsonPropertyName("genres")]
+        public IEnumerable<string> Genre { get; set; }
+
+        /// <summary>
+        /// Gets or sets the thumbnail.
+        /// </summary>
+        [JsonPropertyName("thumbnail")]
+        public string Thumbnail { get; set; }
+
+        /// <summary>
+        /// Gets or sets the summary.
+        /// </summary>
+        [JsonPropertyName("extract")]
+        public string Summary { get; set; }
     }
 }

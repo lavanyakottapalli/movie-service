@@ -16,6 +16,8 @@ namespace Microsoft.Movie.Store
     using System.Reflection;
     using Microsoft.AspNetCore.Mvc.ApiExplorer;
     using Microsoft.Movie.Store.Models;
+    using Azure.Security.KeyVault.Secrets;
+    using Azure.Identity;
 
     /// <summary>
     /// StartUp.
@@ -50,27 +52,16 @@ namespace Microsoft.Movie.Store
         public void ConfigureServices(IServiceCollection services)
         {
 
-            string indexName = "movie-index";
+            string indexName = "movie-search-index";
 
             // Get the service endpoint and API key from the environment
-            Uri endpoint = new Uri("https://movie-store.search.windows.net");
-            string key = "";
+            Uri endpoint = new Uri("https://movie-search-store.search.windows.net");
 
             // Create a client
-            AzureKeyCredential credential = new AzureKeyCredential(key);
-            SearchClient searchClient = new SearchClient(endpoint, indexName, credential);
+            SearchClient searchClient = new SearchClient(endpoint, indexName, new DefaultAzureCredential());
 
             services.AddSingleton(searchClient);
 
-            RestClientOptions options = new RestClientOptions("https://api.themoviedb.org/3/authentication");
-
-#pragma warning disable CA2000 // Dispose objects before losing scope
-            RestClient restClient = new RestClient(options);
-#pragma warning restore CA2000 // Dispose objects before losing scope
-
-            services.AddSingleton(restClient);
-            // services.AddHostedService<LongRunning>();
-            services.AddSingleton<IProcessorWorkflow, PopulateMovieStoreWorkflow>();
             services.AddSingleton<ISearchWorkflow<MovieIndexRecord>, SearchWorkflow<MovieIndexRecord>>();
             _ = services.AddSwaggerGen();
             _ = services.AddControllers()
@@ -82,27 +73,30 @@ namespace Microsoft.Movie.Store
             {
                 options.SuppressInferBindingSourcesForParameters = true;
             });
+            _ = services.AddCors(o =>
+            {
+                o.AddDefaultPolicy(b =>
+                {
+                    b.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().WithExposedHeaders("lastModifiedAt", "lastModifiedBy");
+                });
+            });
         }
 
         /// <summary>
         /// Configures the specified application. This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         /// </summary>
-        public void Configure(IApplicationBuilder app, IHostApplicationLifetime lifetime, RestClient restClient)
+        public void Configure(IApplicationBuilder app, IHostApplicationLifetime lifetime)
         {
             ArgumentNullException.ThrowIfNull(lifetime);
 
             _ = app.UseRouting();
             _ = app.UseSwagger();
+            _ = app.UseCors();
             _ = app.UseSwaggerUI();
             _ = app.UseHttpsRedirection();
             _ = app.UseEndpoints(endpoints =>
             {
                 _ = endpoints.MapControllers();
-            });
-
-            _ = lifetime.ApplicationStopping.Register(() =>
-            {
-                restClient.Dispose();
             });
         }
     }
