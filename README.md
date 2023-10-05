@@ -23,18 +23,16 @@ Our API is documented using Swagger UI. You can access it here https://movie-app
 
 #### Search Movies
 
-- **Endpoint**: `/api/movies/search`
+- **Endpoint**: `/movies/search`
 - **Method**: POST
 - **Parameters**:
-  - `top` (number): Number of movies to retrieve (default is 20).
-  - `filterExpression` (string): Filter expression for searching movies.
+  - `search` (string): Filter expression for searching movies.
 
 **Example Request:**
 
 ```json
 {
-  "top": 10,
-  "filterExpression": "Action"
+  "search": "2023",
 }
 ```
 
